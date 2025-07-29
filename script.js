@@ -11,11 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const indicadorCarregando = document.getElementById('carregando');
 
     // --- 1. CONEXÃO COM O SUPABASE ---
-    // Certifique-se de que suas chaves estão corretas aqui!
-    const SUPABASE_URL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q';
+    const SUPABASE_URL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicmd9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzgyNjE4NSwiZXhwIjoyMDY5NDAyMTg1fQ.01b30c8m-A7g7H27rkWhAxOrKU1kzWbUFUIQcvjZYZk';
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if (!SUPABASE_URL || SUPABASE_URL === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicmd9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q' || !SUPABASE_KEY || SUPABASE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzgyNjE4NSwiZXhwIjoyMDY5NDAyMTg1fQ.01b30c8m-A7g7H27rkWhAxOrKU1kzWbUFUIQcvjZYZk') {
+        indicadorCarregando.textContent = "ERRO: As chaves do Supabase não foram configuradas no arquivo script.js!";
+        indicadorCarregando.style.color = '#ef5350';
+        return;
+    }
+
+    // CORREÇÃO: A variável global da biblioteca é 'supabase'. Nós criamos nosso cliente
+    // e o guardamos em uma nova variável 'supabaseClient' para evitar conflitos.
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // --- ESTADO DA APLICAÇÃO ---
     let aventuraAtivaId = null;
@@ -23,21 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNÇÕES PRINCIPAIS ---
 
-    /**
-     * Busca todas as aventuras no banco de dados e as renderiza no mural.
-     */
     async function carregarAventuras() {
         indicadorCarregando.style.display = 'block';
+        indicadorCarregando.textContent = 'Carregando aventuras...';
+        indicadorCarregando.style.color = '#ffebcd';
         mural.innerHTML = '';
 
-        const { data: aventuras, error } = await supabase
+        // Usando a nova variável supabaseClient
+        const { data: aventuras, error } = await supabaseClient
             .from('aventuras')
             .select('*')
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error('Erro ao buscar aventuras:', error);
-            indicadorCarregando.textContent = `Erro ao carregar as aventuras: ${error.message}`;
+            console.error('Erro detalhado ao buscar aventuras:', error);
+            indicadorCarregando.textContent = `Erro ao carregar: ${error.message}.`;
+            indicadorCarregando.style.color = '#ef5350';
             return;
         }
 
@@ -52,49 +60,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Cria o elemento HTML para uma única aventura.
-     */
     function criarElementoAventura(aventura) {
         const chamadoDiv = document.createElement('div');
         chamadoDiv.className = 'chamado';
         chamadoDiv.dataset.id = aventura.id;
         const jogadores = aventura.jogadores || [];
-
-        chamadoDiv.innerHTML = `
-            <h3>${aventura.titulo}</h3>
-            <p>${aventura.descricao}</p>
-            <div class="info-adicional">
-                <p><strong>Nível:</strong> ${aventura.nivel}</p>
-                <p><strong>Mestre:</strong> ${aventura.mestre}</p>
-            </div>
-            <div class="lista-jogadores">
-                <h4>Jogadores:</h4>
-                <ul id="jogadores-${aventura.id}">
-                    ${jogadores.map(nome => `<li>${nome}</li>`).join('')}
-                </ul>
-            </div>
-        `;
+        chamadoDiv.innerHTML = `<h3>${aventura.titulo}</h3><p>${aventura.descricao}</p><div class="info-adicional"><p><strong>Nível:</strong> ${aventura.nivel}</p><p><strong>Mestre:</strong> ${aventura.mestre}</p></div><div class="lista-jogadores"><h4>Jogadores:</h4><ul id="jogadores-${aventura.id}">${jogadores.map(nome => `<li>${nome}</li>`).join('')}</ul></div>`;
         chamadoDiv.addEventListener('click', () => abrirModal(aventura));
         return chamadoDiv;
     }
     
-    /**
-     * Envia uma nova aventura para o banco de dados do Supabase.
-     */
     formNovoChamado.addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = e.target.querySelector('button');
         btn.disabled = true;
         btn.textContent = 'Publicando...';
+        const { titulo, descricao, nivel, mestre } = Object.fromEntries(new FormData(e.target));
 
-        // CORREÇÃO: Pegando os valores diretamente pelo ID.
-        const titulo = document.getElementById('input-titulo').value;
-        const descricao = document.getElementById('input-descricao').value;
-        const nivel = document.getElementById('input-nivel').value;
-        const mestre = document.getElementById('input-mestre').value;
-
-        const { data, error } = await supabase
+        // Usando a nova variável supabaseClient
+        const { data, error } = await supabaseClient
             .from('aventuras')
             .insert({ titulo, descricao, nivel, mestre, jogadores: [] })
             .select();
@@ -111,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- LÓGICA DO MODAL ---
-
     function abrirModal(aventura) {
         aventuraAtivaId = aventura.id;
         aventuraAtivaJogadores = aventura.jogadores || [];
@@ -119,13 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizarListaJogadoresModal(aventuraAtivaJogadores);
         modalOverlay.classList.add('visivel');
     }
-
     function fecharModal() {
         modalOverlay.classList.remove('visivel');
         aventuraAtivaId = null;
         aventuraAtivaJogadores = [];
     }
-    
     function renderizarListaJogadoresModal(jogadores) {
         modalListaJogadores.innerHTML = '';
         jogadores.forEach(nome => {
@@ -135,24 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
             modalListaJogadores.appendChild(item);
         });
     }
-    
     formAdicionarJogador.addEventListener('submit', async (e) => {
         e.preventDefault();
         const inputNome = document.getElementById('input-nome-jogador');
         const nomeJogador = inputNome.value.trim();
-        
         if (nomeJogador && aventuraAtivaId !== null) {
             const novaListaJogadores = [...aventuraAtivaJogadores, nomeJogador];
-            const { data, error } = await supabase
-                .from('aventuras')
-                .update({ jogadores: novaListaJogadores })
-                .eq('id', aventuraAtivaId)
-                .select();
-            
-            if (error) {
-                console.error('Erro ao adicionar jogador:', error);
-                alert(`Não foi possível adicionar o jogador: ${error.message}`);
-            } else {
+            // Usando a nova variável supabaseClient
+            const { error } = await supabaseClient.from('aventuras').update({ jogadores: novaListaJogadores }).eq('id', aventuraAtivaId);
+            if (error) { alert(`Erro ao adicionar jogador: ${error.message}`); }
+            else {
                 aventuraAtivaJogadores = novaListaJogadores;
                 renderizarListaJogadoresModal(aventuraAtivaJogadores);
                 document.getElementById(`jogadores-${aventuraAtivaId}`).innerHTML = aventuraAtivaJogadores.map(nome => `<li>${nome}</li>`).join('');
@@ -161,29 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
     modalListaJogadores.addEventListener('click', async (e) => {
         if (e.target.classList.contains('remover-jogador')) {
             const nomeParaRemover = e.target.dataset.nome;
             const novaListaJogadores = aventuraAtivaJogadores.filter(j => j !== nomeParaRemover);
-
-            const { data, error } = await supabase
-                .from('aventuras')
-                .update({ jogadores: novaListaJogadores })
-                .eq('id', aventuraAtivaId)
-                .select();
-
-            if (error) {
-                console.error('Erro ao remover jogador:', error);
-                alert(`Não foi possível remover o jogador: ${error.message}`);
-            } else {
+            // Usando a nova variável supabaseClient
+            const { error } = await supabaseClient.from('aventuras').update({ jogadores: novaListaJogadores }).eq('id', aventuraAtivaId);
+            if (error) { alert(`Erro ao remover jogador: ${error.message}`); }
+            else {
                 aventuraAtivaJogadores = novaListaJogadores;
                 renderizarListaJogadoresModal(aventuraAtivaJogadores);
                 document.getElementById(`jogadores-${aventuraAtivaId}`).innerHTML = aventuraAtivaJogadores.map(nome => `<li>${nome}</li>`).join('');
             }
         }
     });
-    
     modalFechar.addEventListener('click', fecharModal);
     modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) fecharModal(); });
 
