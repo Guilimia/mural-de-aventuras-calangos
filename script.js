@@ -11,22 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const indicadorCarregando = document.getElementById('carregando');
 
     // --- 1. CONEXÃO COM O SUPABASE ---
+    
     const SUPABASE_URL = 'https://navmtbqnnnkvkljsxfvx.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q';
 
-    if (!SUPABASE_URL || SUPABASE_URL === 'https://navmtbqnnnkvkljsxfvx.supabase.co' || !SUPABASE_KEY || SUPABASE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q') {
-        indicadorCarregando.textContent = "ERRO: As chaves do Supabase não foram configuradas no arquivo script.js!";
+    // Verificação simples e funcional
+    if (SUPABASE_URL === 'https://navmtbqnnnkvkljsxfvx.supabase.co' || SUPABASE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q') {
+        indicadorCarregando.textContent = "ERRO: Configure suas chaves do Supabase no arquivo script.js!";
         indicadorCarregando.style.color = '#ef5350';
         return;
     }
 
-    // CORREÇÃO: A variável global da biblioteca é 'supabase'. Nós criamos nosso cliente
-    // e o guardamos em uma nova variável 'supabaseClient' para evitar conflitos.
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // --- ESTADO DA APLICAÇÃO ---
-    let aventuraAtivaId = null;
-    let aventuraAtivaJogadores = [];
 
     // --- FUNÇÕES PRINCIPAIS ---
 
@@ -36,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         indicadorCarregando.style.color = '#ffebcd';
         mural.innerHTML = '';
 
-        // Usando a nova variável supabaseClient
         const { data: aventuras, error } = await supabaseClient
             .from('aventuras')
             .select('*')
@@ -75,13 +70,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = e.target.querySelector('button');
         btn.disabled = true;
         btn.textContent = 'Publicando...';
-        const { titulo, descricao, nivel, mestre } = Object.fromEntries(new FormData(e.target));
+        
+        const titulo = document.getElementById('input-titulo').value;
+        const descricao = document.getElementById('input-descricao').value;
+        const nivel = document.getElementById('input-nivel').value;
+        const mestre = document.getElementById('input-mestre').value;
 
-        // Usando a nova variável supabaseClient
-        const { data, error } = await supabaseClient
+        const { error } = await supabaseClient
             .from('aventuras')
-            .insert({ titulo, descricao, nivel, mestre, jogadores: [] })
-            .select();
+            .insert({ titulo, descricao, nivel, mestre, jogadores: [] });
 
         if (error) {
             console.error('Erro ao inserir aventura:', error);
@@ -122,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const nomeJogador = inputNome.value.trim();
         if (nomeJogador && aventuraAtivaId !== null) {
             const novaListaJogadores = [...aventuraAtivaJogadores, nomeJogador];
-            // Usando a nova variável supabaseClient
             const { error } = await supabaseClient.from('aventuras').update({ jogadores: novaListaJogadores }).eq('id', aventuraAtivaId);
             if (error) { alert(`Erro ao adicionar jogador: ${error.message}`); }
             else {
@@ -138,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('remover-jogador')) {
             const nomeParaRemover = e.target.dataset.nome;
             const novaListaJogadores = aventuraAtivaJogadores.filter(j => j !== nomeParaRemover);
-            // Usando a nova variável supabaseClient
             const { error } = await supabaseClient.from('aventuras').update({ jogadores: novaListaJogadores }).eq('id', aventuraAtivaId);
             if (error) { alert(`Erro ao remover jogador: ${error.message}`); }
             else {
