@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mural de Aventuras</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Chamados de Aventura</h1>
+        </header>
+
+        <main id="mural">
+            </main>
+
+        <section class="painel-admin">
+            <h2>Painel do Mestre</h2>
+            <form id="form-novo-chamado">
+                <input type="text" id="input-titulo" placeholder="Título da Aventura" required>
+                <textarea id="input-descricao" rows="4" placeholder="Descreva a missão..." required></textarea>
+                <input type="text" id="input-nivel" placeholder="Nível recomendado" required>
+                <input type="text" id="input-mestre" placeholder="Nome do Mestre" required>
+                <button type="submit">Publicar Novo Chamado</button>
+            </form>
+        </section>
+    </div>
+
+    <div id="modal-jogadores" class="modal-overlay">
+        <div class="modal-conteudo">
+            <button class="modal-fechar">&times;</button>
+            <h2 id="modal-titulo-aventura">Gerenciar Jogadores</h2>
+            <div id="modal-lista-jogadores">
+                </div>
+            <form id="form-adicionar-jogador">
+                <input type="text" id="input-nome-jogador" placeholder="Nome do novo jogador" required>
+                <button type="submit">Adicionar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
