@@ -1,0 +1,207 @@
+/* Estilo geral e Fundo */
+body {
+    background-color: #5d4037;
+    background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px; /* Largura menor para layout vertical */
+    margin: 0 auto;
+}
+
+header h1 {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 4rem;
+    color: #ffebcd;
+    text-align: center;
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 40px;
+}
+
+/* Mural Vertical */
+#mural {
+    display: flex;
+    flex-direction: column; /* Organiza os chamados em uma única coluna */
+    align-items: center;   /* Centraliza os chamados na coluna */
+    gap: 25px;
+}
+
+/* Estilo de cada "Chamado" no mural */
+.chamado {
+    background-color: #ffebcd;
+    padding: 20px 25px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 600px; /* Largura máxima para cada chamado */
+    box-sizing: border-box;
+    cursor: pointer; /* Indica que o card é clicável */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chamado:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 15px rgba(0,0,0,0.4);
+}
+
+.chamado h3 {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.8rem;
+    margin-top: 0;
+    color: #5D4037;
+    border-bottom: 2px solid #8d6e63;
+    padding-bottom: 10px;
+}
+
+.chamado p {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.info-adicional {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #8d6e63;
+    font-size: 0.9rem;
+}
+
+.info-adicional span {
+    font-weight: bold;
+}
+
+.lista-jogadores {
+    margin-top: 15px;
+}
+
+.lista-jogadores h4 {
+    margin-bottom: 5px;
+    font-family: 'MedievalSharp', cursive;
+    color: #5D4037;
+}
+
+.lista-jogadores ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.lista-jogadores li {
+    background-color: #d7ccc8;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+/* Painel do Administrador */
+.painel-admin {
+    background-color: #4e342e;
+    padding: 25px;
+    margin-top: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* ... (estilos do painel-admin, form, etc. podem ser mantidos como antes) ... */
+.painel-admin h2{font-family:'MedievalSharp',cursive;color:#ffebcd;text-align:center;margin-top:0;font-size:2rem}#form-novo-chamado{display:flex;flex-direction:column;gap:15px}#form-novo-chamado input,#form-novo-chamado textarea{width:100%;padding:12px;border:2px solid #a1887f;border-radius:4px;background-color:#ffebcd;font-size:1rem;box-sizing:border-box}#form-novo-chamado button{padding:15px;background-color:#c8a415;color:white;font-family:'MedievalSharp',cursive;font-size:1.5rem;border:none;border-radius:5px;cursor:pointer;transition:background-color .2s;text-shadow:1px 1px 2px #000}#form-novo-chamado button:hover{background-color:#e5bb1e}
+
+/* --- ESTILOS DA JANELA MODAL --- */
+.modal-overlay {
+    position: fixed; /* Fica fixo na tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo preto semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden; /* Começa invisível */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s;
+    z-index: 1000;
+}
+
+.modal-overlay.visivel {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-conteudo {
+    background: #ffebcd;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.modal-fechar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #8d6e63;
+}
+
+#modal-lista-jogadores .jogador-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #d7ccc8;
+}
+
+#modal-lista-jogadores .remover-jogador {
+    background-color: #ef5350; /* Vermelho */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#form-adicionar-jogador {
+    display: flex;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+#form-adicionar-jogador input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid #a1887f;
+    border-radius: 4px;
+}
+
+#form-adicionar-jogador button {
+    padding: 10px 20px;
+    background-color: #66bb6a; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.carregando-mural {
+    text-align: center;
+    font-family: 'MedievalSharp', cursive;
+    color: #ffebcd;
+    font-size: 1.5rem;
+    padding: 40px;
+}
