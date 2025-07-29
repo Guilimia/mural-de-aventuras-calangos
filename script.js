@@ -11,10 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const indicadorCarregando = document.getElementById('carregando');
 
     // --- 1. CONEXÃO COM O SUPABASE ---
-    const SUPABASE_URL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicmd9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzgyNjE4NSwiZXhwIjoyMDY5NDAyMTg1fQ.01b30c8m-A7g7H27rkWhAxOrKU1kzWbUFUIQcvjZYZk';
+    const SUPABASE_URL = 'https://navmtbqnnnkvkljsxfvx.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q';
 
-    if (!SUPABASE_URL || SUPABASE_URL === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicmd9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q' || !SUPABASE_KEY || SUPABASE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzgyNjE4NSwiZXhwIjoyMDY5NDAyMTg1fQ.01b30c8m-A7g7H27rkWhAxOrKU1kzWbUFUIQcvjZYZk') {
+    if (!SUPABASE_URL || SUPABASE_URL === 'https://navmtbqnnnkvkljsxfvx.supabase.co' || !SUPABASE_KEY || SUPABASE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q') {
         indicadorCarregando.textContent = "ERRO: As chaves do Supabase não foram configuradas no arquivo script.js!";
         indicadorCarregando.style.color = '#ef5350';
         return;
