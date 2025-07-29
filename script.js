@@ -1,6 +1,6 @@
+// VERSÃO DE DEPURAÇÃO - 29/07/2025
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- SELEÇÃO DE ELEMENTOS DO DOM ---
     const mural = document.getElementById('mural');
     const formNovoChamado = document.getElementById('form-novo-chamado');
     const modalOverlay = document.getElementById('modal-jogadores');
@@ -11,24 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const indicadorCarregando = document.getElementById('carregando');
 
     // --- 1. CONEXÃO COM O SUPABASE ---
-    
+    // COLE SUAS CHAVES REAIS E ATUALIZADAS NOS DOIS CAMPOS ABAIXO.
+    // ESTA É A ÚNICA PARTE QUE VOCÊ DEVE EDITAR.
     const SUPABASE_URL = 'https://navmtbqnnnkvkljsxfvx.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q';
 
-    // Verificação simples e funcional
-    if (SUPABASE_URL === 'https://navmtbqnnnkvkljsxfvx.supabase.co' || SUPABASE_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdm10YnFubm5rdmtsanN4ZnZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MjYxODUsImV4cCI6MjA2OTQwMjE4NX0.jD5djgfWxdzQtT5dhbSQbHTpri9_thsw1mLSYZZm__Q') {
-        indicadorCarregando.textContent = "ERRO: Configure suas chaves do Supabase no arquivo script.js!";
-        indicadorCarregando.style.color = '#ef5350';
-        return;
-    }
-
+    // O bloco de verificação foi REMOVIDO de propósito para depuração.
+    // O código tentará se conectar diretamente com o que estiver acima.
+    
+    indicadorCarregando.textContent = "Tentando conectar ao Supabase...";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    console.log("Cliente Supabase criado. Tentando buscar aventuras...");
 
     // --- FUNÇÕES PRINCIPAIS ---
 
     async function carregarAventuras() {
         indicadorCarregando.style.display = 'block';
-        indicadorCarregando.textContent = 'Carregando aventuras...';
         indicadorCarregando.style.color = '#ffebcd';
         mural.innerHTML = '';
 
@@ -38,11 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error('Erro detalhado ao buscar aventuras:', error);
-            indicadorCarregando.textContent = `Erro ao carregar: ${error.message}.`;
+            console.error('ERRO REAL ENCONTRADO:', error);
+            indicadorCarregando.textContent = `ERRO AO BUSCAR DADOS: ${error.message}. Veja o console para detalhes.`;
             indicadorCarregando.style.color = '#ef5350';
             return;
         }
+
+        console.log("Aventuras buscadas com sucesso:", aventuras);
 
         if (aventuras.length === 0) {
             indicadorCarregando.textContent = 'Nenhum chamado de aventura ainda. Crie o primeiro!';
@@ -90,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = false;
         btn.textContent = 'Publicar Novo Chamado';
     });
-
-    // --- LÓGICA DO MODAL ---
+    
+    // O resto do código do Modal permanece o mesmo...
     function abrirModal(aventura) {
         aventuraAtivaId = aventura.id;
         aventuraAtivaJogadores = aventura.jogadores || [];
@@ -145,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     modalFechar.addEventListener('click', fecharModal);
     modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) fecharModal(); });
-
+    
+    // --- INICIALIZAÇÃO ---
     carregarAventuras();
 });
